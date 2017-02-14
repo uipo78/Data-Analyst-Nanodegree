@@ -1,1 +1,1 @@
-N/A
+Parts of db_shaper were obtained from the course.

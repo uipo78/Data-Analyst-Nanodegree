@@ -1,5 +1,5 @@
 # Analysis
-The analysis is provided in three formats. All code used to conduct the analysis is displayed in the RMD file.
+The analysis is provided in two formats. All code used to conduct the analysis is displayed in the RMD file.
 
 # About the data
 The data in the directory "json file" was obtained from Riot's developer webpage (navigate https://developer.riotgames.com/docs/getting-started to "Seed Data" for the source). To see a sample of the raw data structure, please see sample-match_doc.json.

@@ -150,6 +150,7 @@ Compare the circled location above to the its respective location on images of o
 match_teams <- read.csv('datasets-csv\\match_teams.csv')
 match_teams$towerKills <- factor(match_teams$towerKills, ordered=TRUE)
 match_teams$inhibitorKills <- factor(match_teams$inhibitorKills, ordered=TRUE)
+match_teams <- data.table(match_teams)
 ```
 
 This dataset consists of 2000 observations of teams from 1000 matches (two teams per match). The dataset records 12 variables. The matchId field serves as an index. 
@@ -238,7 +239,7 @@ par(oma=c(0, 0, .5, 0))
 
 agg <- aggregate(rep(1, nrow(match_teams)) ~ winner + firstInhibitor + firstTower + firstBlood, 
                  FUN=sum, 
-                 data=match_teams[, -1])
+                 data=match_teams[, !'matchId'])
 
 
 alluvial(agg[, 1:(ncol(agg)-1)], freq=agg[, ncol(agg)], 
@@ -289,7 +290,8 @@ P4_PATH = 'Q:\\Program Files\\Programming Applications\\Projects\\Udacity\\Data 
 champ_popularity = pd.read_csv(P4_PATH + 'datasets-csv\\champ_popularity.csv')
 
 # Creates indices for the top/bottom five in each tier
-sorted_index = champ_popularity.iloc[:, 1:].sum(axis=1).sort_values().index
+cols_to_sort = [n for n in champ_popularity.columns if n != 'champion name']
+sorted_index = champ_popularity.loc[:, cols_to_sort].sum(axis=1).sort_values().index
 
 champ_popularity.columns = ['champion name', 'unranked', 'bronze', 'silver', 'gold',
                             'platinum', 'diamond', 'master', 'challenger', 'total']
@@ -374,7 +376,7 @@ The graph may, at first glance, appear normal, albeit a bit skewed. What worries
 
 ### Bootstrapping for Median's Confidence Interval
 
-```{r bootstrap}
+```{r bootstrap, message=FALSE, warning=FALSE}
 nboot <- 3000
 alpha <- 0.05
 sample_size <- 1000
@@ -406,12 +408,13 @@ levelUp_times <- data.table(levelUp_times)
 ```
 
 ```{r levelUp_times_summary}
-levelUp_times %>% group_by(lvlAchieved) %>% 
+levelUp_times_summary <- levelUp_times %>% group_by(lvlAchieved) %>% 
   summarise(first_quartile_in_sec=quantile(timestamp, prob=.25),
             median_time_in_sec=median(timestamp),
             third_quartile_in_sec=quantile(timestamp, prob=.75),
             n=n()) %>%
   tail
+levelUp_times_summary
 ```
 
 It may not be surprising that the median times increase as the level achieved increases. However, this is not always true. For levels after 19, the strictly monotone relationship deteriorates. We will see this in the figure below.
@@ -427,7 +430,7 @@ ggplot(levelUp_times[lvlAchieved >= 17][lvlAchieved != 23], aes(factor(lvlAchiev
   coord_flip()
 ```
 
-We should be a bit skeptical of these values for levels 20 and above. Why? Remember from the summary report that the size of each group is very small. So perhaps for those groups our data isn't a good representation of the population. 
+We should be a bit skeptical of these values for levels 20 and above. Why? Remember from the summary report that the size of each group is very small. So perhaps for those groups our data isn't a good representation of the population. Personally, I've never played a game where in which I achieved a level above 19 (or maybe I have but I don't remember because there aren't any more skills to upgrade). For this reason, I've decided to exclude these levels from further analysis.
 
 All that considered, let's now look at a frequency plot for all levels. We will divide the plots in two so that they are easier to read.
 
@@ -443,7 +446,7 @@ ggplot(levelUp_times[lvlAchieved <= 12], aes(timestamp, colour=factor(lvlAchieve
 Let's first take care of the, what may at first appear to be, strange pattern between level 2 and 3. You probably expect that frequency will becomes less concentrated as a function of increasing level; for, as one levels up, it becomes harder to do so, and higher performing players will outpace their counterparts. Thus level 3's frequency shouldn't be much more concentrated than level 2. From my experience, I suspect that this strange pattern is a result of players being away from the keyboard (AFK) at the beginning of the game&mdash;something which happens quite often. But this is not certain. In any case, for all other levels, the frequency does become less concentrated as a function of increasing level. See the graph above and the graph below to confirm.
 
 ```{r levelUp_times_freq_mid-upper}
-ggplot(levelUp_times[lvlAchieved > 12], aes(timestamp, colour=factor(lvlAchieved))) +
+ggplot(levelUp_times[lvlAchieved > 12][lvlAchieved <= 19], aes(timestamp, colour=factor(lvlAchieved))) +
   geom_freqpoly(binwidth=40) +
   xlab('Time (sec)') +
   ylab('Frequency') +
@@ -454,19 +457,20 @@ ggplot(levelUp_times[lvlAchieved > 12], aes(timestamp, colour=factor(lvlAchieved
 Now, let's compare the median times to achieve a certain level.
 
 ```{r levelUp_median}
-ggplot(levelUp_times, aes(lvlAchieved, timestamp/60, colour=highestAchievedSeasonTier)) +
+fp3 <- ggplot(levelUp_times[lvlAchieved <= 19], aes(lvlAchieved, timestamp/60, colour=highestAchievedSeasonTier)) +
   geom_step(stat='summary', fun.y=median) +
   xlab('Level Achieved') +
   ylab('Time (min)') +
   ggtitle('Median Time to Achieve Level N by Tier') +
   scale_colour_brewer(name='Tier', type = "seq", palette = "Oranges") +
   theme_dark()
+fp3
 ```
 
 The median times do appear to disperse as a function of increasing level, although the details of the dispersion may not be clear.
 
 ```{r levelUp_median_truncated}
-ggplot(levelUp_times[lvlAchieved >= 10][lvlAchieved <= 18],
+ggplot(levelUp_times[lvlAchieved >= 10][lvlAchieved <= 19],
        aes(lvlAchieved, timestamp/60, colour=highestAchievedSeasonTier)) +
   geom_step(stat='summary', fun.y=median) +
   xlab('Level Achieved') +
@@ -549,7 +553,7 @@ par(oma=c(0, 0, .5, 0))
 
 agg <- aggregate(rep(1, nrow(match_teams)) ~ winner + firstInhibitor + firstTower + firstBlood, 
                  FUN=sum, 
-                 data=match_teams[, -1])
+                 data=match_teams[, !'matchId'])
 
 
 alluvial(agg[, 1:(ncol(agg)-1)], freq=agg[, ncol(agg)], 
@@ -565,20 +569,12 @@ This diagram reveals a lot. Notably: 1) First blood isn't as strong of an indica
 ### Plot Three
 
 ```{r fp_levelUp_median}
-ggplot(levelUp_times, aes(lvlAchieved, timestamp/60, colour=highestAchievedSeasonTier)) +
-  geom_step(stat='summary', fun.y=median) +
-  xlab('Level Achieved') +
-  ylab('Time (min)') +
-  ggtitle('Median Time to Achieve Level N by Tier') +
-  scale_colour_brewer(name='Tier', type = "seq", palette = "Oranges") +
-  theme_dark()
+fp3
 ```
 
 ### Description Three
 
 The median time to achieve level n generally appears to decrease as tier level increases&mdash;i.e., median times for the bronze tier become higher than diamond as level increases. This is not true for the unranked tier, whose median times float between those of silver and gold. But since the unranked tier could contain players who might belong to any tier, this isn't too surprising.
-
-We should be a bit skeptical of the values for levels past 20. Why? Remember from the summary report that the size of each group is very small. So perhaps for those groups our data isn't a good representation of the population. 
 
 ------
 

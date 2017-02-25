@@ -1,5 +1,8 @@
+# Preface
 
-# P1: Test a Perceptual Phenomenon
+Unfortunately, I am unable to render the LaTeX parts of this document on Github. To see the rendered LaTeX, please run the P1.ipynb on your local system.
+
+# Test a Perceptual Phenomenon
 
 In this problem set, we investigate the Stroop effect by examining the reaction times of individuals tasked with verbally identifying the color of words whose meanings conflict with their text color (see "Background Information" section of the prompt). 
 
@@ -69,7 +72,7 @@ plt.show()
 ```
 
 
-![png](output_6_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P1/images_for_github_readme/output_6_0.png)
 
 
 It's worth making a mental note of the outliers in the incongruent group, in the event that it plays an important role in our test's performance later on.
@@ -93,7 +96,7 @@ plt.show()
 ```
 
 
-![png](output_9_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P1/images_for_github_readme/output_9_0.png)
 
 
 The congruent data appears pretty normal; however, the same cannot be said for the incongruent data. Let's see if the paired difference values are normally distributed.
@@ -107,7 +110,7 @@ plt.show()
 ```
 
 
-![png](output_11_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P1/images_for_github_readme/output_11_0.png)
 
 
 This does not look normal. We can further support or refute this observation by using the Wilcoxon signed-rank test, whose hypotheses set is 

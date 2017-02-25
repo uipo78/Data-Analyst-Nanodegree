@@ -5,7 +5,7 @@ Give a non-English speaker a pair of headsets and play two recordings made in En
 
 ### About the data
 The data in the directory "json file" was obtained from Riot's developer webpage 
-(navigate https://developer.riotgames.com/docs/getting-started to "Seed Data" for the source). 
+(navigate [here](https://developer.riotgames.com/docs/getting-started) to "Seed Data" for the source). 
 To see a sample of the raw data structure, please see sample-match_doc.json.
 
 ### Handling the data

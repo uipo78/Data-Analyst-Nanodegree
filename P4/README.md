@@ -1,3 +1,8 @@
+# Exploring Seed Data from League of Legends
+### Abstract
+
+Give a non-English speaker a pair of headsets and play two recordings made in English—one, a sports broadcast, and the other, a League of Legends (LoL) broadcast. The person will not likely be able to discern that the LoL broadcast isn’t reporting a sports match. LoL and sports, with the physical aspect removed, have much in common: both have strong fanbases, both have rigorous and, perhaps surprisingly, lucrative competitions, and both inspire their fans to uncover the underlying mechanisms that lead to victory and to better gameplay. Such is the object of this analysis.
+
 Death Location Patterns
 =======================
 

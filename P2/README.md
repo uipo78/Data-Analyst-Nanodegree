@@ -537,7 +537,7 @@ plt.show()
 ```
 
 
-![png](output_29_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P2/images_for_github_readme/output_29_0.png)
 
 
 median_salary clearly appears non-normal. But what if we perform a log-transformation?
@@ -570,7 +570,7 @@ plt.show()
 ```
 
 
-![png](output_31_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P2/images_for_github_readme/output_31_0.png)
 
 
 These graphs suggest that both variables come from a normally distributed population.
@@ -590,7 +590,7 @@ plt.show()
 ```
 
 
-![png](output_34_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P2/images_for_github_readme/output_34_0.png)
 
 
 There do not appear to be any outliers.
@@ -619,7 +619,7 @@ plt.show()
 ```
 
 
-![png](output_36_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P2/images_for_github_readme/output_36_0.png)
 
 
 So success and log-transformed median salary have a statistically significant weak, positive linear correlation.
@@ -653,7 +653,7 @@ plt.show()
 ```
 
 
-![png](output_39_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P2/images_for_github_readme/output_39_0.png)
 
 
 Thus, there is a statistically significant weak, positive monotonic relationship between median_salary and success. 
@@ -692,7 +692,7 @@ plt.show()
 ```
 
 
-![png](output_44_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P2/images_for_github_readme/output_44_0.png)
 
 
 As this graph shows, there is a two-fold issue: an increasing trend in not only median player salaries but also variance in within-year median salaries. Both trends introduce confounds for which none of our tests at the moment can account. 
@@ -723,7 +723,7 @@ plt.show()
 ```
 
 
-![png](output_49_0.png)
+![png](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P2/images_for_github_readme/output_49_0.png)
 
 
 There is a conspicuous difference in the distributions' shapes. Thus, we can state in words the Mann-Whitney U test hypotheses set:

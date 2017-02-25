@@ -3,6 +3,22 @@
 
 Give a non-English speaker a pair of headsets and play two recordings made in English—one, a sports broadcast, and the other, a League of Legends (LoL) broadcast. The person will not likely be able to discern that the LoL broadcast isn’t reporting a sports match. LoL and sports, with the physical aspect removed, have much in common: both have strong fanbases, both have rigorous and, perhaps surprisingly, lucrative competitions, and both inspire their fans to uncover the underlying mechanisms that lead to victory and to better gameplay. Such is the object of this analysis.
 
+### About the data
+The data in the directory "json file" was obtained from Riot's developer webpage 
+(navigate https://developer.riotgames.com/docs/getting-started to "Seed Data" for the source). 
+To see a sample of the raw data structure, please see sample-match_doc.json.
+
+### Handling the data
+The data was entered into a local Mongo database in order to make extracting relevant information easier. 
+Data resulting from all Mongo queries were dumped into separate csv files, which are located in datasets-csv. 
+Please see "to_mongo.py" in "json-to-mongo" and the contents of "formatters" in order to examine the python scripts 
+that perform the aforementioned processes.
+
+The six files in "formatters" generate the six csv files in "datasets-csv" which comprise the six main sections in the analysis below.
+
+### About data_exploration_files
+This file only exists so that this analysis can be displayed here. As such, you may ignore it for any other purpose.
+
 Death Location Patterns
 =======================
 

@@ -4,28 +4,28 @@ Death Location Patterns
 This dataset consists of 63,755 observations of death and 3 variables detailing the death occurence's position and time.
 
 <center>
-![Death Location Frequency](misc\death_location_heatmap.png)
+![Death Location Frequency](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/death_location_heatmap.png)
 </center>
 As you might expect, the majority of deaths occured within the lanes, and in partucilar, in the middle of the map for each lane. The middle lane appears to be the most active lane, while the top, the least.
 
 There is one noticeable and somewhat unexpected aspect.
 
 <center>
-![Ganking circled](misc\heatmap-circled.png)
+![Ganking circled](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/heatmap-circled.png)
 </center>
 Take a look at these hotspots. The activity in these locations is rather high, especially as jungle locations. Perhaps these are the most popular (or maybe most successful) ganking locations.
 
 Now, let's see how death occurences change with respect to time. In the image below, death location frequencies are depicted over four intervals, each representing a quarter of the interval (0, max(*t*)), where max(*t*) represents the largest timestamp value in the dataset. Even if, for one game, the end time occurs in the third interval, while, for another, in the fourth, this partitioning should give us a rough idea of what's going on.
 
 <center>
-![Death Location Frequency Over Time](misc\death_location_time.png)
+![Death Location Frequency Over Time](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/death_location_time.png)
 </center>
 The first interval depicts several interesting patterns. Most of the beginning of the game takes place in the middle part of each lane. This makes sense: players need to level up and earn money before they can be more adventurous. I wonder if there's more to the bottom lane having the most activity in this interval.
 
 The fourth interval depicts something else interesting as well.
 
 <center>
-![Baron Nashor location circled](misc\time-circled.png)
+![Baron Nashor location circled](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/time-circled.png)
 </center>
 Compare the circled location above to the its respective location on images of other intervals: you will find that there is much more activity in that location in the fourth interval than any other. Not too surprising: that's where Baron Nashor is located, a monster typically killed in clinch games in order to gain a competitive edge. It should be noted that the activity here doesn't necessarily represent the Baron's capacity to kill players, although it certainly can; more likely, the activity highlights the Baron's appeal in the latter part of games.
 

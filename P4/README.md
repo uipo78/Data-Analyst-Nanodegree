@@ -150,12 +150,12 @@ This dataset consists of 128 observations of champions. The dataset records the 
 We won't spend much time in this section. Our primary interest here is to identify the most/least popular champions chosen by players of each tier.
 
 <center>
-![](misc\most_pop_champ.png)
+![](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/most_pop_champ.png)
 </center>
 Miss Fortune is quite popular, appearing in 6 out of the 8 tiers and being the most popular champion in total.
 
 <center>
-![](misc\least_pop_champ.png)
+![](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/least_pop_champ.png)
 </center>
 Yorick is quite unpopular, appearing in 7 out of the 8 tiers adn being the least popular champion in total.
 

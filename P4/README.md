@@ -245,7 +245,7 @@ The median times do appear to disperse as a function of increasing level, althou
 
 Indeed, this chart clairifies the dispersion. As expected, the median time to achieve level n generally appears to decrease as tier level increases—i.e., median times for the bronze tier become higher than diamond as level increases. This is not true for the unranked tier, whose median times float between those of silver and gold. But since the unranked tier could contain players who might belong to any tier, this isn't too surprising.
 
-Kills/Deaths/Assits
+Kills/Deaths/Assists
 ===================
 
 ``` r

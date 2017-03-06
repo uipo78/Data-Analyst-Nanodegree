@@ -28,7 +28,7 @@ with open(PATH + 'final_project_dataset.pkl', 'r') as data_file:
     data_dict = pickle.load(data_file)
 ```
 
-## Short Questions
+## Free-Response Questions
 ### Question 1 
 __*Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. Were there any outliers in the data when you got it, and how did you handle those?*__
 

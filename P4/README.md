@@ -291,14 +291,14 @@ Final Plots and Summary
 ### Plot and Description One
 
 <center>
-![](misc\death_location_time.png)
+![](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/death_location_time.png)
 </center>
 The first interval depicts several interesting patterns. Most of the beginning of the game takes place in the middle part of each lane. This makes sense: players need to level up and earn money before they can be more adventurous. I wonder if there's more to the bottom lane having the most activity in this interval.
 
 The fourth interval depicts something else interesting as well.
 
 <center>
-![](misc\time-circled.png)
+![](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/time-circled.png)
 </center>
 Compare the circled location above to the its respective location on images of other intervals: you will find that there is much more activity in that location in the fourth interval than any other. Not too surprising: that's where Baron Nashor is located, a monster typically killed in clinch games in order to gain a competitive edge. It should be noted that the activity here doesn't necessarily represent the Baron's capacity to kill players, although it certainly can; more likely, the activity highlights the Baron's appeal in the latter part of games.
 

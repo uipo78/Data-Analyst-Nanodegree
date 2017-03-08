@@ -1,6 +1,6 @@
 # Data Analyst Nanodegree Portfolio
 
-## Projects:
+## Projects
 
 * *Project 1:* [Analyzing the Stroop Effect](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P1)
 * *Project 2:* [Investigating Success in Baseball](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P2)
@@ -9,7 +9,7 @@
 * *Project 5:* [Identifying Fraud from Enron Emails](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P5)
 
 
-## Tools and technical skills improved/acquired:
+## Tools and technical skills improved/acquired
 * Python
 * R
 * SQL

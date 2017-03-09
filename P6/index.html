@@ -29,17 +29,12 @@
 					};
 
 					var domain = {
-						min: {x: -120, y: -120},
-						max: {x: 14870, y: 14980}
+						min: {x: 0, y: 0},
+						max: {x: 14820, y: 14881}
 					};
 		    		var width = 512;
 		    		var height = 512;
 		    		var summonersRift = 'https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png';
-		    		
-					var color = d3.scaleLinear()
-				  	  	.domain([0, 3])
-				  	  	.range(['white', 'steelblue'])
-				  	  	.interpolate(d3.interpolateLab);
 
 					var xScale = d3.scaleLinear()
 					   	.domain([domain.min.x, domain.max.x])
@@ -66,7 +61,7 @@
 					    .enter().append("svg:circle")
 					        .attr('cx', function(d) { return xScale(d.x) })
 					        .attr('cy', function(d) { return yScale(d.y) })
-					        .attr('r', 5)
+					        .attr('r', 1)
 					        .attr('class', 'kills');
 				};
 		</script>

@@ -62,14 +62,6 @@
               		   .attr('y', '0')
               		   .attr('width', width)
               		   .attr('height', height);
-
-              		svg.append('svg:g').selectAll("circle")
-    					.data(cords)
-					    .enter().append("svg:circle")
-					        .attr('cx', function(d) { return xScale(d[0]) })
-					        .attr('cy', function(d) { return yScale(d[1]) })
-					        .attr('r', 5)
-					        .attr('class', 'kills');
               	};
 		</script>
 </head>

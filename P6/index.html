@@ -18,21 +18,19 @@
 </head>
 <body>
 	<script type="text/javascript">
-		var margin = {
-			r: 30,
-			b: 30
-		},
-		    dim = {
-			w: 542 - margin.r,
-			h: 542 - margin.b
+		var rightMargin = 30;
+
+		var dim = {
+			w:542  - rightMargin,
+			h: 512
 		};
 
 		var svg = d3.select('body')
 			.append('svg')
-				.attr('width', dim.w + margin.r)
-				.attr('height', dim.h + margin.b);
+				.attr('width', dim.w + rightMargin)
+				.attr('height', dim.h);
 
-		// Lay Summoner's Rift
+		/** Lay Summoner's Rift **/
 		var urlSummoners = 'https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png';
 		svg.append('image')
 		    .attr('xlink:href', urlSummoners)
@@ -41,7 +39,7 @@
 		    .attr('width', dim.w)
 		    .attr('height', dim.h);
 
-		// Create grid for hexbins
+		/** Create grid for hexbins **/
 		svg.append('clipPath')
 			.attr('id', 'clip')
 			.append('rect')
@@ -49,13 +47,13 @@
 				.attr('width', dim.w)
 				.attr('height', dim.h);
 		
-		// Create lower chart
-		var lowerHeight = 150 - margin.b;
+		/** Create lower chart **/
+		var lowerHeight = 150;
 
-		var lowerChart = d3.select('#chart').classed('chart', true)
+		var lowerChart = d3.select('body')
 			.append('svg').classed('navigator', true)
-			.attr('width', dim.w + margin.r)
-			.attr('height', lowerHeight + margin.b)
+			.attr('width', dim.w + rightMargin)
+			.attr('height', lowerHeight);
 
 		var domain = {
 			min: {x: 0, y: 0},

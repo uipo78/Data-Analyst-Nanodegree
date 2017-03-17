@@ -48,7 +48,7 @@
 				.attr('class', 'mesh')
 				.attr('width', dim.w)
 				.attr('height', dim.h);
-
+		
 		var hexbin = d3.hexbin()
 			.size([dim.w, dim.h])
 			.x(function(d) { return d.x; })
@@ -62,9 +62,8 @@
 
 		var xScale = d3.scaleLinear()
 			.domain([domain.min.x, domain.max.x])
-			.range([0, dim.w]);
-
-		var yScale = d3.scaleLinear()
+			.range([0, dim.w]),
+		    yScale = d3.scaleLinear()
 			.domain([domain.min.y, domain.max.y])
 			.range([dim.h, 0]);
 
@@ -80,7 +79,6 @@
 			var color = d3.scaleSequential(d3.interpolateInferno)
 			    	.domain([0, d3.max(hbinData, function(d) { return d.length; })]);
 
-
 			// Display hexbins
 			svg.append('g')
 				.attr('clip-path', 'url(#clip)')
@@ -93,12 +91,6 @@
 						return 'translate(' + d.x + ',' + d.y + ')';
 					})
 					.style('fill', function(d) { return color(d.length); });
-
-			// Make time toggle bar
-			var minTime = d3.min(deathLoc, function(d) { return d.timestamp; }),
-				maxTime = d3.max(deathLoc, function(d) { return d.timestamp; });
-
-
 
 		});
 	</script>

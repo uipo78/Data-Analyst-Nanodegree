@@ -21,16 +21,14 @@
 <body>
 	<script type="text/javascript">
 		d3.csv('death_location.csv', function(death_loc) {
-			var url_summoners = 'https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png'
-
 			var dim = {
 				w: 512,
 				h: 512
 			};
 			
 			var domain = {
-				min: {x: 0, y: 0},
-				max: {x: 14820, y: 14881}
+				min: {x: -120, y: 120},
+				max: {x: 14870, y: 14980}
 			};
 
 			var xScale = d3.scaleLinear()
@@ -45,11 +43,11 @@
 				.size([dim.w, dim.h])
 				.x(function(d) { return d.x; })
 				.y(function(d) { return d.y; })
-				.radius(2.5);
+				.radius(2);
 
-			death_loc.forEach(function(d) {
-				d.x = xScale(d.x)
-				d.y = yScale(d.y)
+			death_loc.forEach(function(el) {
+				el.x = xScale(el.x)
+				el.y = yScale(el.y)
 			});
 
 			var hbin_data = hexbin(death_loc);
@@ -65,13 +63,6 @@
 				.append('svg')
 					.attr('width', dim.w)
 					.attr('height', dim.h);
-
-			svg.append('image')
-			    .attr('xlink:href', url_summoners)
-			    .attr('x', '0')
-			    .attr('y', '0')
-			    .attr('width', dim.w)
-			    .attr('height', dim.h);
 
 			svg.append('clipPath')
 				.attr('id', 'clip')

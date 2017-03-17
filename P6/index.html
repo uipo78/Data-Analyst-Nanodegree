@@ -1,11 +1,16 @@
-<!-- TODO: finish axes and add apply them to transform -->
+<!-- TODO: 
+		* Fill out entire 512x512 space with hexes
+		* Make time toggle bar
+		* Have actual map beside hexbins
+		* Have some sort of feature that highlights the location 
+		  of the hexbin under consideration on the actual map.
+ -->
 
 <!DOCTYPE html>
 <html>
 <head>
 	<script src='https://d3js.org/d3.v4.js'></script>
 	<script src='js\d3.hexbin.min.js'></script>
-	<script src='js\d3.topojson.v1.min.js'></script>
 	<style type="text/css">
 		.hexagon {
 		  stroke: #000;
@@ -26,9 +31,6 @@
 				max: {x: 14870, y: 14980}
 			};
 
-			var color = d3.scaleSequential(d3.interpolateInferno)
-				.domain([0, death_loc.length]);
-
 			var xScale = d3.scaleLinear()
 				.domain([domain.min.x, domain.max.x])
 				.range([0, dim.w]);
@@ -37,16 +39,25 @@
 				.domain([domain.min.y, domain.max.y])
 				.range([dim.h, 0]);
 
+			var hexbin = d3.hexbin()
+				.size([dim.w, dim.h])
+				.x(function(d) { return d.x; })
+				.y(function(d) { return d.y; })
+				.radius(2);
+
 			death_loc.forEach(function(el) {
 				el.x = xScale(el.x)
 				el.y = yScale(el.y)
 			});
 
-			var hexbin = d3.hexbin()
-				.size([dim.w, dim.h])
-				.x(function(d) { return d.x; })
-				.y(function(d) { return d.y; })
-				.radius(3);
+			var hbin_data = hexbin(death_loc);
+
+			var min_time = d3.min(death_loc, function(d) { return d.timestamp; }),
+				max_time = d3.max(death_loc, function(d) { return d.timestamp; });
+
+			// Note: domain maximum is max count out of all hexbins
+			var color = d3.scaleSequential(d3.interpolateInferno)
+			    	.domain([0, d3.max(hbin_data, function(d) { return d.length; })]);
 
 			var svg = d3.select('body')
 				.append('svg')

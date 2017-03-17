@@ -32,7 +32,7 @@ As you might expect, the majority of deaths occured within the lanes, and in par
 There is one noticeable and somewhat unexpected aspect.
 
 <center>
-![Ganking circled](https://github.com/uipo78/data-analyst-nanodegree/blob/master/P4/misc/heatmap-circled.png)
+![Ganking circled](P4/misc/heatmap-circled.png)
 </center>
 Take a look at these hotspots. The activity in these locations is rather high, especially as jungle locations. Perhaps these are the most popular (or maybe most successful) ganking locations.
 

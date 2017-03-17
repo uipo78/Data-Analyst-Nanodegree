@@ -18,13 +18,17 @@
 </head>
 <body>
 	<script type="text/javascript">
-		d3.csv('death_location.csv', function(death_loc) {
-			var url_summoners = 'https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png';
-
+		d3.csv('death_location.csv', function(deathLoc) {
 			var dim = {
 				w: 512,
 				h: 512
 			};
+
+			var hexbin = d3.hexbin()
+				.size([dim.w, dim.h])
+				.x(function(d) { return d.x; })
+				.y(function(d) { return d.y; })
+				.radius(2);
 			
 			var domain = {
 				min: {x: 0, y: 0},
@@ -39,38 +43,35 @@
 				.domain([domain.min.y, domain.max.y])
 				.range([dim.h, 0]);
 
-			var hexbin = d3.hexbin()
-				.size([dim.w, dim.h])
-				.x(function(d) { return d.x; })
-				.y(function(d) { return d.y; })
-				.radius(2);
-
-			death_loc.forEach(function(el) {
-				el.x = xScale(el.x)
-				el.y = yScale(el.y)
+			deathLoc.forEach(function(d) {
+				d.x = xScale(d.x)
+				d.y = yScale(d.y)
 			});
 
-			var hbin_data = hexbin(death_loc);
+			var hbinData = hexbin(deathLoc);
 
-			var min_time = d3.min(death_loc, function(d) { return d.timestamp; }),
-				max_time = d3.max(death_loc, function(d) { return d.timestamp; });
+			var minTime = d3.min(deathLoc, function(d) { return d.timestamp; }),
+				maxTime = d3.max(deathLoc, function(d) { return d.timestamp; });
 
 			// Note: domain maximum is max count out of all hexbins
 			var color = d3.scaleSequential(d3.interpolateInferno)
-			    	.domain([0, d3.max(hbin_data, function(d) { return d.length; })]);
+			    	.domain([0, d3.max(hbinData, function(d) { return d.length; })]);
 
 			var svg = d3.select('body')
 				.append('svg')
 					.attr('width', dim.w)
 					.attr('height', dim.h);
 
+			// Lay Summoner's Rift
+			var urlSummoners = 'https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png';
 			svg.append('image')
-			    .attr('xlink:href', url_summoners)
+			    .attr('xlink:href', urlSummoners)
 			    .attr('x', '0')
 			    .attr('y', '0')
 			    .attr('width', dim.w)
 			    .attr('height', dim.h);
 
+			// Establish grid for hexbins
 			svg.append('clipPath')
 				.attr('id', 'clip')
 				.append('rect')
@@ -78,10 +79,11 @@
 					.attr('width', dim.w)
 					.attr('height', dim.h);
 
+			// Display hexbins
 			svg.append('g')
 				.attr('clip-path', 'url(#clip)')
 				.selectAll('.hexagon')
-					.data(hexbin(death_loc)).enter()
+					.data(hexbin(deathLoc)).enter()
 				.append('path')
 					.attr('class', 'hexagon')
 					.attr('d', hexbin.hexagon())

@@ -7,10 +7,11 @@
 * *Project 3:* [Wrangling OpenStreetMap Data of New York City Area](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P3)
 * *Project 4:* [Exploring Seed Data from League of Legends](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P4)
 * *Project 5:* [Identifying Fraud from Enron Emails](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P5)
-
+* *Project 6:* [Sankey with D3](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P6)
 
 ## Tools and technical skills improved/acquired
 * Python
 * R
 * SQL
 * MongoDB
+* D3

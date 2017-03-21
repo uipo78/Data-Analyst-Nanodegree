@@ -14,4 +14,4 @@
 * R
 * SQL
 * MongoDB
-* D3
+* D3.js

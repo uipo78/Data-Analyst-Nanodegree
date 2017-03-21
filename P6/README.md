@@ -1,6 +1,8 @@
 ## Summary
 This graphic's purpose is to depict the relationship between victory and achieving some sort of goal (e.g., getting 'first blood'). In other words, the graphic attempts to depict the relationship between momentum and victory.
 
+_Note_: Each folder contains a python script make_data.py. Executing this script generates the sankey_data file relevant to the respective index.html.
+
 ## Design
 * Following the first reviewer's comment, I reorganized the nodes such that the winner nodes are positioned to the left and every 'first' node is positioned to the right. I also included the highlighting functionality that she suggested.
 * Following the second reviewer's comment, I decided to display only those 'first' nodes that are true. I also added pop-up text to the existing hover functionality.

@@ -1,104 +1,99 @@
-<!-- TODO: 
-		* Make time toggle bar
-		* Have something that shows percentage of deaths displayed when toggle bar is set
-		  to show a subinterval of time of the deaths
--->
-
 <!DOCTYPE html>
 <html>
 <head>
-	<script src='https://d3js.org/d3.v4.js'></script>
-	<script src='js\d3.hexbin.min.js'></script>
-	<style type="text/css">
-		.hexagon {
+	<title>Sankey Diagram League of Legends</title>
+	<style>
+		.link {
+		  fill: none;
 		  stroke: #000;
 		  stroke-opacity: .2;
+		}
+		 
+		.link:hover {
+		  stroke-opacity: .6;
 		}
 	</style>
 </head>
 <body>
+	<p id='chart'>
+	<script src='https://d3js.org/d3.v4.js'></script>
+	<script src="https://unpkg.com/d3-sankey@0"></script>
 	<script type="text/javascript">
-		var rightMargin = 30;
+		var margin = { top: 60, bottom: 10, left: 10, right: 10},
+			width = 1420 - margin.left - margin.right,
+			height = 820 - margin.top - margin.bottom;
 
-		var dim = {
-			w:542  - rightMargin,
-			h: 512
-		};
+		var color = d3.scaleOrdinal(d3.schemeCategory20b);
 
-		var svg = d3.select('body')
-			.append('svg')
-				.attr('width', dim.w + rightMargin)
-				.attr('height', dim.h);
-
-		/** Lay Summoner's Rift **/
-		var urlSummoners = 'https://s3-us-west-1.amazonaws.com/riot-api/img/minimap-ig.png';
-		svg.append('image')
-		    .attr('xlink:href', urlSummoners)
-		    .attr('x', '0')
-		    .attr('y', '0')
-		    .attr('width', dim.w)
-		    .attr('height', dim.h);
-
-		/** Create grid for hexbins **/
-		svg.append('clipPath')
-			.attr('id', 'clip')
-			.append('rect')
-				.attr('class', 'mesh')
-				.attr('width', dim.w)
-				.attr('height', dim.h);
+		var svg = d3.select('#chart').append('svg')
+				.attr('width', width + margin.left + margin.right)
+				.attr('height', height + margin.top + margin.bottom)
+			.append('g')
+				.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 		
-		/** Create lower chart **/
-		var lowerHeight = 150;
+		svg.append('text')
+			.attr('x', width/2)
+			.attr('y', 0 - (margin.top/2))
+			.attr('text-anchor', 'middle')
+			.style('font-size', '24px')
+			.style('font-weight', 'bold')
+			.text('Sankey Diagram: Team Performance in League of Legends');
 
-		var lowerChart = d3.select('body')
-			.append('svg').classed('navigator', true)
-			.attr('width', dim.w + rightMargin)
-			.attr('height', lowerHeight);
+		var sankey = d3.sankey()
+			.nodeWidth(40)
+			.nodePadding(10)
+			.size([width, height]);
 
-		var domain = {
-			min: {x: 0, y: 0},
-			max: {x: 14820, y: 14881}
-		};
+		var path = sankey.link();
 
-		var xScale = d3.scaleLinear()
-			.domain([domain.min.x, domain.max.x])
-			.range([0, dim.w]);
+		d3.json('data\\sankey_data.json', function(error, data) {
+			if(error) throw error;
 
-		var yScale = d3.scaleLinear()
-			.domain([domain.min.y, domain.max.y])
-			.range([dim.h, 0]);
+			sankey.nodes(data.nodes)
+				.links(data.links)
+				.layout(32);
 
-		d3.csv('death_location.csv', function(deathLoc) {		
-			var hexbin = d3.hexbin()
-				.size([dim.w, dim.h])
-				.x(function(d) { return d.x; })
-				.y(function(d) { return d.y; })
-				.radius(2);
+			var link = svg.append('g').selectAll('.link')
+				.data(data.links)
+				.enter().append('path')
+					.attr('class', 'link')
+					.attr('d', path)
+					.style('stroke-width', function(d) {
+						return Math.max(1, d.dy);
+					});
 
-			deathLoc.forEach(function(d) {
-				d.x = xScale(d.x)
-				d.y = yScale(d.y)
-			});
+			link.append('title')
+				.text(function(d) {
+					var sourceSplit = d.source.name.split('_'),
+						targetSplit = d.target.name.split('_');
+					return sourceSplit[0] + ' is ' + sourceSplit[1] + ' and ' 
+						+ targetSplit[0] + ' is ' + targetSplit[1] + ':\n' 
+						+ d.value + ' teams';
+				})
 
-			var hbinData = hexbin(deathLoc);
+			var node = svg.append('g').selectAll('node')
+				.data(data.nodes)
+				.enter().append('g')
+				.attr('class', 'node')
+				.attr('transform', function(d) {
+					return 'translate(' + d.x + ',' + d.y + ')';
+				});
 
-			// Note: domain maximum is max count out of all hexbins
-			var color = d3.scaleSequential(d3.interpolateInferno)
-			    	.domain([0, d3.max(hbinData, function(d) { return d.length; })]);
+			node.append('rect')
+				.attr('height', function(d) { return d.dy; })
+				.attr('width', sankey.nodeWidth())
+				.style('fill', function(d) { return d.color = color(d.name); })
+				.style('stroke', function(d) { return d3.rgb(d.color).darker(5); });
 
-			// Display hexbins
-			svg.append('g')
-				.attr('clip-path', 'url(#clip)')
-				.selectAll('.hexagon')
-					.data(hbinData).enter()
-				.append('path')
-					.attr('class', 'hexagon')
-					.attr('d', hexbin.hexagon())
-					.attr('transform', function(d) { 
-						return 'translate(' + d.x + ',' + d.y + ')';
-					})
-					.style('fill', function(d) { return color(d.length); });
-
+			node.append('text')
+					.attr('x', -2)
+					.attr('y', function(d) { return d.dy / 2; })
+					.attr('dy', '.35em')
+					.attr('text-anchor', 'end')
+				.text(function(d) { return d.name; })
+					.filter(function(d) { return d.x < width / 2; })
+					.attr('x', 2 + sankey.nodeWidth())
+					.attr('text-anchor', 'start');
 		});
 	</script>
 </body>

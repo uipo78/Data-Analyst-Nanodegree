@@ -37,22 +37,22 @@
 			.attr('text-anchor', 'middle')
 			.style('font-size', '24px')
 			.style('font-weight', 'bold')
-			.text('Sankey Diagram: Team Performance in League of Legends');
+			.text('Victory and Momentum in League of Legends');
 
 		var sankey = d3.sankey()
 			.nodeWidth(40)
 			.nodePadding(10)
 			.size([width, height]);
-
+		
 		var path = sankey.link();
 
-		d3.json('data\\sankey_data.json', function(error, data) {
+		d3.json('sankey_data.json', function(error, data) {
 			if(error) throw error;
-
+		
 			sankey.nodes(data.nodes)
 				.links(data.links)
 				.layout(32);
-
+		
 			var link = svg.append('g').selectAll('.link')
 				.data(data.links)
 				.enter().append('path')
@@ -61,15 +61,17 @@
 					.style('stroke-width', function(d) {
 						return Math.max(1, d.dy);
 					});
-
+		
 			link.append('title')
 				.text(function(d) {
-					var sourceSplit = d.source.name.split('_'),
-						targetSplit = d.target.name.split('_');
-					return sourceSplit[0] + ' is ' + sourceSplit[1] + ' and ' 
-						+ targetSplit[0] + ' is ' + targetSplit[1] + ':\n' 
-						+ d.value + ' teams';
-				})
+					var sourceSplit = d.source.name.split('_');
+
+					if (sourceSplit[1] === 'True') {
+						return d.value + ' teams won and achieved ' + d.target.name;
+					} else {
+						return d.value + ' teams lost and achieved ' + d.target.name; 
+					}
+				});
 
 			var node = svg.append('g').selectAll('node')
 				.data(data.nodes)
@@ -84,7 +86,7 @@
 				.attr('width', sankey.nodeWidth())
 				.style('fill', function(d) { return d.color = color(d.name); })
 				.style('stroke', function(d) { return d3.rgb(d.color).darker(5); });
-
+		
 			node.append('text')
 					.attr('x', -2)
 					.attr('y', function(d) { return d.dy / 2; })

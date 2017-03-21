@@ -1,7 +1,10 @@
 import json
+import os
 import pandas as pd
 
-df = pd.read_csv('data\\orig_data.csv')
+os.chdir('..')
+
+df = pd.read_csv('orig_data.csv')
 
 source_target_pairs = [
 	('firstBlood', 'firstTower'), ('firstTower', 'firstInhibitor'),
@@ -34,5 +37,5 @@ for source, target in source_target_pairs:
 				'value': subgroup[1].shape[0]
 			})
 
-with open('data\\sankey_data.json', 'w+') as fp:
+with open('stage1\\sankey_data.json', 'w+') as fp:
 	json.dump(data, fp)

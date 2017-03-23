@@ -39,7 +39,7 @@
 			.attr('text-anchor', 'middle')
 			.style('font-size', '24px')
 			.style('font-weight', 'bold')
-			.text('Victory and Momentum in League of Legends');
+			.text('Momentum in League of Legends: The Relationship Between Victory and Being the First to Achieve X');
 
 		var sankey = d3.sankey()
 			.nodeWidth(40)
@@ -72,9 +72,9 @@
 					var sourceSplit = d.source.name.split('_');
 
 					if (sourceSplit[1] === 'True') {
-						return d.value + ' teams won and achieved ' + d.target.name;
+						return d.value + ' teams won and achieved ' + prettifyFeatureNames(d.target.name).toLowerCase();
 					}
-					return d.value + ' teams lost and achieved ' + d.target.name; 
+					return d.value + ' teams lost and achieved ' + prettifyFeatureNames(d.target.name).toLowerCase(); 
 				});
 
 			// Adds node data to svg

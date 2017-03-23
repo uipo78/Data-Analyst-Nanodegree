@@ -25,12 +25,14 @@
 
 		var color = d3.scaleOrdinal(d3.schemeCategory20b);
 
+		// Creates the svg element on which the depiction and title will be placed
 		var svg = d3.select('#chart').append('svg')
 				.attr('width', width + margin.left + margin.right)
 				.attr('height', height + margin.top + margin.bottom)
 			.append('g')
 				.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 		
+		// Creates depiction's title
 		svg.append('text')
 			.attr('x', width/2)
 			.attr('y', 0 - (margin.top/2))
@@ -47,12 +49,14 @@
 		var path = sankey.link();
 
 		d3.json('sankey_data.json', function(error, data) {
+			// Checks for error in loading data
 			if(error) throw error;
 
 			sankey.nodes(data.nodes)
 				.links(data.links)
 				.layout(32);
 
+			// Creates grey shapes that connect nodes (called 'links')
 			var link = svg.append('g').selectAll('.link')
 				.data(data.links)
 				.enter().append('path')
@@ -61,18 +65,19 @@
 					.style('stroke-width', function(d) {
 						return Math.max(1, d.dy);
 					});
-		
+			
+			// Creates pop-up text for when mouse hovers over a link
 			link.append('title')
 				.text(function(d) {
 					var sourceSplit = d.source.name.split('_');
 
 					if (sourceSplit[1] === 'True') {
 						return d.value + ' teams won and achieved ' + d.target.name;
-					} else {
-						return d.value + ' teams lost and achieved ' + d.target.name; 
 					}
+					return d.value + ' teams lost and achieved ' + d.target.name; 
 				});
 
+			// Adds node data to svg
 			var node = svg.append('g').selectAll('node')
 				.data(data.nodes)
 				.enter().append('g')
@@ -81,22 +86,35 @@
 					return 'translate(' + d.x + ',' + d.y + ')';
 				});
 
+			// Specifies nodes' shape as rectangle as well asother characteristics
 			node.append('rect')
 				.attr('height', function(d) { return d.dy; })
 				.attr('width', sankey.nodeWidth())
 				.style('fill', function(d) { return d.color = color(d.name); })
 				.style('stroke', function(d) { return d3.rgb(d.color).darker(5); });
-		
+
+			// Adds feature name corresponding to each node (e.g., firstBlood)
 			node.append('text')
 					.attr('x', -2)
 					.attr('y', function(d) { return d.dy / 2; })
 					.attr('dy', '.35em')
 					.attr('text-anchor', 'end')
-				.text(function(d) { return d.name; })
+				.text(function(d) { return prettifyFeatureNames(d.name); })
 					.filter(function(d) { return d.x < width / 2; })
 					.attr('x', 2 + sankey.nodeWidth())
 					.attr('text-anchor', 'start');
 		});
+
+		function prettifyFeatureNames(s) {
+			if (s === 'winner_True') {
+				return 'Won';
+			} else if (s === 'winner_False') {
+				return 'Lost';
+			} else if (s === 'firstRiftHerald') {
+				return 'First Rift Herald';
+			}
+			return 'First ' + s.slice(5, s.length, 1); // Separates first from whatever follows
+		};
 	</script>
 </body>
 </html>

@@ -93,7 +93,12 @@ __*What features did you end up using in your POI identifier, and what selection
 
 Since I couldn't intuitively justify which features should/shouldn't be included in the analysis, I decided to let an unsupervised machine learning algorithm choose&mdash;namely, principal components analysis (PCA). But before running this algorithm, I needed to do some feature engineering.
 
-Feature engineering consisted of the following processes: scaling those features included in the list 'features_to_scale' (shown below) and creating two new features from four raw features. The scaling method is pretty self-explanatory (see code below). The two new features measure the proprotion of an individual's emails that were sent from/to a POI. I scrap the four raw features in favor of two new features because, intuitively, the frequency of contact between POI seemed to be easier to understand and more relevant than, say, a normalized number of emails sent to/from a POI (and one whose scale would be consistent across all individuals). 
+Feature engineering consisted of the following processes: scaling those features included in the list 'features_to_scale' (shown below) and creating two new features from four raw features. The scaling method is pretty self-explanatory (see code below). The two new features measure the proprotion of an individual's emails that were sent from/to a POI. I scrap the four raw features in favor of two new features because, intuitively, the frequency of contact between POI seemed to be easier to understand and more relevant than, say, a normalized number of emails sent to/from a POI (and one whose scale would be consistent across all individuals). The table below exhibits the impact of the feature engineering on precision and recall for the GaussianNB model with 8 principal components.
+
+|                        | Precision | Recall |
+| :----------------------|------:|------:|
+| No feature engineering | 0.401 | 0.298 |
+| Feature engineering    | 0.426 | 0.382 |
 
 Notice that every feature is normalized. This is necessary for PCA, as without normalized features, PCA may incorrectly identify the principal component encoding the most variance. Example: suppose that the variance in salary is small but still has a value larger than one, and that the variance in the frequency of emails sent to/from a POI are large but (necessarily) has a value  less than or equal to 1. Then, PCA will favor principal components encoding the variance in salary over the variance in email frequency, because of the larger magnitude of the variance in salary; this is the exact opposite of what we would want. 
 
@@ -145,11 +150,25 @@ Below is a table of the tested algorithms. Excluding the Gaussian Naive Bayes Cl
 
 | Classifier                      | Precision | Recall | PCA Components |
 | :-------------------------------|------:|------:|------:|
-| Gaussian Naive Bayes Classifier | 0.358 | 0.301 | 10 |
+| Gaussian Naive Bayes Classifier | 0.426 | 0.382 | 8 |
 | Support Vector Classifier       | 0.549 | 0.104 | 11 |
 | Random Forest Classifier        | 0.376 | 0.148 | 13 |
 
-Let's talk about each of these algorithms. As you can see, SVC performed quite well in precision but not well in recall. I attempted to tune the parameters in such a way as to increase recall. But it may be that the lack of balance in the number of POI and non-POI individuals in the data set is limiting SVC's performance in recall. The Random Forest Classifier performed nearly the same as SVC, but took *much* longer to execute than SVC. Gaussian Naive Bayes appears, for our purposes, to have the most desireable performance. What's more, it executed very quickly (0.264s) and it didn't require any parameter tuning (this does not include PCA, which found 10 components to be the most optimal).
+Let's talk about each of these algorithms. As you can see, SVC performed quite well in precision but not well in recall. I attempted to tune the parameters in such a way as to increase recall. But it may be that the lack of balance in the number of POI and non-POI individuals in the data set is limiting SVC's performance in recall. The Random Forest Classifier performed nearly the same as SVC, but took *much* longer to execute than SVC. Gaussian Naive Bayes appears, for our purposes, to have the most desireable performance. What's more, it executed very quickly (0.762s) and it didn't require any parameter tuning (this does not include PCA, which found 8 components to be the most optimal).
+
+One last note on the PCA components: just as a sanity check, we should look at the each component's explained variance ratio, and check that the explained variances decrease as the you consider the components in ascending order. As you can see in the graph below, this is the case. In many cases, we might plot these explained variance ratios against the components and choose for our model those components which come before a principal component whose explained variance is much smaller than the previous. However, this assignment required that our model's precision and recall be greater than 0.3. Having a smaller number of components than that provided here would have resulted in our model having a much higher precision value but also a recall value lower than 0.3.
+
+Table of the variance explained by each component&mdash;
+| Component | Explained Variance Ratio |
+| :-------------------------------|------:|
+| 1 | .316 | 
+| 2 | .149 |
+| 3 | .116 |
+| 4 | .104 |
+| 5 | .085 |
+| 6 | .050 |
+| 7 | .044 |
+| 8 | .036 |
 
 ### Question 4
 __*What does it mean to tune the parameters of an algorithm, and what can happen if you don’t do this well?  How did you tune the parameters of your particular algorithm?*__ 

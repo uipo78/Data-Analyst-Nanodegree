@@ -12,25 +12,28 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
 from time import time
 
-sys.path.append("../tools/")
+from pprint import pprint
+
+sys.path.append('../tools/')
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
 
 # Select features to use.
-features_list = ['poi', 'salary', 'deferral_payments', 'total_payments',
-                 'loan_advances', 'bonus', 'restricted_stock_deferred',
-                 'deferred_income', 'total_stock_value', 'expenses',
-                 'exercised_stock_options', 'other', 'long_term_incentive',
-                 'restricted_stock', 'director_fees',
-                 'shared_receipt_with_poi', 'to_messages',
-                 'from_poi_to_this_person', 'from_messages',
-                 'from_this_person_to_poi']
+orig_features_list = ['poi', 'salary', 'deferral_payments', 'total_payments',
+                      'loan_advances', 'bonus', 'restricted_stock_deferred',
+                      'deferred_income', 'total_stock_value', 'expenses',
+                      'exercised_stock_options', 'other', 'long_term_incentive',
+                      'restricted_stock', 'director_fees',
+                      'shared_receipt_with_poi', 'to_messages',
+                      'from_poi_to_this_person', 'from_messages',
+                      'from_this_person_to_poi']
 
 
-with open("final_project_dataset.pkl", "r") as data_file:
+with open('final_project_dataset.pkl', 'r') as data_file:
     data_dict = pickle.load(data_file)
 
 
@@ -58,28 +61,26 @@ for k in my_dataset.keys():
             data_dict[k]['from_messages'])
 
 
-features_to_scale = ['salary', 'deferral_payments', 'total_payments',
-                     'loan_advances', 'bonus', 'restricted_stock_deferred',
-                     'deferred_income', 'total_stock_value', 'expenses',
-                     'exercised_stock_options', 'other', 'long_term_incentive',
-                     'restricted_stock', 'director_fees']
+features_list = ['poi', 'salary', 'deferral_payments', 'total_payments',
+                 'loan_advances', 'bonus', 'restricted_stock_deferred',
+                 'deferred_income', 'total_stock_value', 'expenses',
+                 'exercised_stock_options', 'other', 'long_term_incentive',
+                 'restricted_stock', 'director_fees']
 
-# Constructs data set used for analysis as well as scales selected features
+# Constructs data set used for analysis
 for k in my_dataset.keys():
-    for feature in ['poi'] + features_to_scale:
-        if feature in features_to_scale and data_dict[k][feature] != 'NaN':
-            my_dataset[k][feature] = float(data_dict[k][feature]) / \
-                                     float(data_dict['TOTAL'][feature])
-        else:
-            my_dataset[k][feature] = data_dict[k][feature]
+    for feature in features_list:
+        my_dataset[k][feature] = data_dict[k][feature]
 
-my_features = ['poi'] + features_to_scale + ['fraction_from_poi', 'fraction_to_poi']
+my_features = features_list + ['fraction_from_poi', 'fraction_to_poi']
 
 # Extract features and labels from data set for local testing
 data = featureFormat(my_dataset, my_features, sort_keys=True)
 labels, features = targetFeatureSplit(data)
 labels = array(labels)
 features = array(features)
+min_max_scaler = MinMaxScaler()
+features_scaled = min_max_scaler.fit_transform(features)
 
 
 pipeline = Pipeline([
@@ -87,10 +88,10 @@ pipeline = Pipeline([
     ('nb', GaussianNB())
 ])
 parameters = {
-    'pca__n_components': range(10, features.shape[1]+1)
+    'pca__n_components': range(7, features.shape[1]+1)
 }
 
-grid_search = GridSearchCV(pipeline, parameters, cv=10)
+grid_search = GridSearchCV(pipeline, parameters, cv=20)
 
 print 'pipeline:', [name for name, _ in pipeline.steps]
 print 'parameters:'

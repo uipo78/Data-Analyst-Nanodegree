@@ -40,5 +40,5 @@ for target in target_nodes:
 			'value': group[1].loc[group[1][target] == True, :].shape[0]
 		})
 
-with open('final-product\\sankey_data.json', 'w+') as fp:
+with open('pre-review\\sankey_data.json', 'w+') as fp:
 	json.dump(data, fp)

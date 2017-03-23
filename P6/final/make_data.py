@@ -7,7 +7,7 @@ os.chdir('..')
 df = pd.read_csv('orig_data.csv')
 
 target_nodes = [
-	'firstBlood', 'firstTower', 'firstInhibitor', 
+	'firstTower', 'firstInhibitor', 
 	'firstRiftHerald', 'firstDragon', 'firstBaron'
 ]
 
@@ -40,5 +40,5 @@ for target in target_nodes:
 			'value': group[1].loc[group[1][target] == True, :].shape[0]
 		})
 
-with open('final-product\\sankey_data.json', 'w+') as fp:
+with open('final\\sankey_data.json', 'w+') as fp:
 	json.dump(data, fp)

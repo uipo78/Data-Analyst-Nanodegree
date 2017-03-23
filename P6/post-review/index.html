@@ -43,16 +43,16 @@
 			.nodeWidth(40)
 			.nodePadding(10)
 			.size([width, height]);
-		
+
 		var path = sankey.link();
 
 		d3.json('sankey_data.json', function(error, data) {
 			if(error) throw error;
-		
+
 			sankey.nodes(data.nodes)
 				.links(data.links)
 				.layout(32);
-		
+
 			var link = svg.append('g').selectAll('.link')
 				.data(data.links)
 				.enter().append('path')

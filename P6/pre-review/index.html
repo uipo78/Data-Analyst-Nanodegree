@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sankey Diagram League of Legends</title>
+	<style>
+		.link {
+		  fill: none;
+		  stroke: #000;
+		  stroke-opacity: .2;
+		}
+		 
+		.link:hover {
+		  stroke-opacity: .6;
+		}
+	</style>
+</head>
+<body>
+	<p id='chart'>
+	<script src='https://d3js.org/d3.v4.js'></script>
+	<script src="https://unpkg.com/d3-sankey@0"></script>
+	<script type="text/javascript">
+		var margin = { top: 60, bottom: 10, left: 10, right: 10},
+			width = 1420 - margin.left - margin.right,
+			height = 820 - margin.top - margin.bottom;
+
+		var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+		var svg = d3.select('#chart').append('svg')
+				.attr('width', width + margin.left + margin.right)
+				.attr('height', height + margin.top + margin.bottom)
+			.append('g')
+				.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+		
+		svg.append('text')
+			.attr('x', width/2)
+			.attr('y', 0 - (margin.top/2))
+			.attr('text-anchor', 'middle')
+			.style('font-size', '24px')
+			.style('font-weight', 'bold')
+			.text('Victory and Momentum in League of Legends');
+
+		var sankey = d3.sankey()
+			.nodeWidth(40)
+			.nodePadding(10)
+			.size([width, height]);
+
+		var path = sankey.link();
+
+		d3.json('sankey_data.json', function(error, data) {
+			if(error) throw error;
+
+			sankey.nodes(data.nodes)
+				.links(data.links)
+				.layout(32);
+
+			var link = svg.append('g').selectAll('.link')
+				.data(data.links)
+				.enter().append('path')
+					.attr('class', 'link')
+					.attr('d', path)
+					.style('stroke-width', function(d) {
+						return Math.max(1, d.dy);
+					});
+		
+			link.append('title')
+				.text(function(d) {
+					var sourceSplit = d.source.name.split('_');
+
+					if (sourceSplit[1] === 'True') {
+						return d.value + ' teams won and achieved ' + d.target.name;
+					} else {
+						return d.value + ' teams lost and achieved ' + d.target.name; 
+					}
+				});
+
+			var node = svg.append('g').selectAll('node')
+				.data(data.nodes)
+				.enter().append('g')
+				.attr('class', 'node')
+				.attr('transform', function(d) {
+					return 'translate(' + d.x + ',' + d.y + ')';
+				});
+
+			node.append('rect')
+				.attr('height', function(d) { return d.dy; })
+				.attr('width', sankey.nodeWidth())
+				.style('fill', function(d) { return d.color = color(d.name); })
+				.style('stroke', function(d) { return d3.rgb(d.color).darker(5); });
+		
+			node.append('text')
+					.attr('x', -2)
+					.attr('y', function(d) { return d.dy / 2; })
+					.attr('dy', '.35em')
+					.attr('text-anchor', 'end')
+				.text(function(d) { return d.name; })
+					.filter(function(d) { return d.x < width / 2; })
+					.attr('x', 2 + sankey.nodeWidth())
+					.attr('text-anchor', 'start');
+		});
+	</script>
+</body>
+</html>

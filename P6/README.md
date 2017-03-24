@@ -5,9 +5,13 @@ _Note_: Each folder contains a python script make_data.py. Executing this script
 
 ## Meaning of Each 'First' Feature
 _First Inhibitor_: Being the first team to destroy an enemy team's inhibitor. This is a prerequisite for destroying nexus towers and the nexus itself&mdash;and, by extension, victory.
+
 _First Baron_: Being the first team to kill Baron Nashor. Killing Baron Nashor rewards a team with bounty and bonus statistics; it is not a prerequisite for victory without surrender.
+
 _First Dragon_: Being the first team to destroy any type of dragon. Killing a dragon rewards a team with bounty and bonus statistics (which differ depending on the type of dragon slain); slaying a dragon is not a prerequisite for victory without surrender.
+
 _First Tower_: Being the first team to destroy an enemy tower. A minimum of six towers must be destroyed in order to achieve a victory without surrender.
+
 _First Rift Herald_: Being the first team to destroy the rift herald. Its death rewards a team with bounty and bonus statistics; it is not a prerequisite for victory without surrender.
 
 ## Design

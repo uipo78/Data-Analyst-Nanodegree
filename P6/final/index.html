@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sankey Diagram League of Legends</title>
+	<style>
+		.link {
+		  fill: none;
+		  stroke: #000;
+		  stroke-opacity: .2;
+		}
+		 
+		.link:hover {
+		  stroke-opacity: .6;
+		}
+	</style>
+</head>
+<body>
+	<p id='chart'>
+	<script src='https://d3js.org/d3.v4.js'></script>
+	<script src="https://unpkg.com/d3-sankey@0"></script>
+	<script type="text/javascript">
+		var margin = { top: 60, bottom: 10, left: 10, right: 10},
+			width = 1420 - margin.left - margin.right,
+			height = 820 - margin.top - margin.bottom;
+
+		var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+		// Creates the svg element on which the depiction and title will be placed
+		var svg = d3.select('#chart').append('svg')
+				.attr('width', width + margin.left + margin.right)
+				.attr('height', height + margin.top + margin.bottom)
+			.append('g')
+				.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+		
+		// Creates depiction's title
+		svg.append('text')
+			.attr('x', width/2)
+			.attr('y', 0 - (margin.top/2))
+			.attr('text-anchor', 'middle')
+			.style('font-size', '24px')
+			.style('font-weight', 'bold')
+			.text('Momentum in League of Legends: \'Getting First X\' Features Strongly Associated with Victory');
+
+		var sankey = d3.sankey()
+			.nodeWidth(40)
+			.nodePadding(10)
+			.size([width, height]);
+
+		var path = sankey.link();
+
+		d3.json('sankey_data.json', function(error, data) {
+			// Checks for error in loading data
+			if(error) throw error;
+
+			sankey.nodes(data.nodes)
+				.links(data.links)
+				.layout(32);
+
+			// Creates grey shapes that connect nodes (called 'links')
+			var link = svg.append('g').selectAll('.link')
+				.data(data.links)
+				.enter().append('path')
+					.attr('class', 'link')
+					.attr('d', path)
+					.style('stroke-width', function(d) {
+						return Math.max(1, d.dy);
+					});
+			
+			// Creates pop-up text for when mouse hovers over a link
+			link.append('title')
+				.text(function(d) {
+					var sourceSplit = d.source.name.split('_');
+
+					if (sourceSplit[1] === 'True') {
+						return d.value + ' teams won and achieved ' + prettifyFeatureNames(d.target.name).toLowerCase();
+					}
+					return d.value + ' teams lost and achieved ' + prettifyFeatureNames(d.target.name).toLowerCase(); 
+				});
+
+			// Adds node data to svg
+			var node = svg.append('g').selectAll('node')
+				.data(data.nodes)
+				.enter().append('g')
+				.attr('class', 'node')
+				.attr('transform', function(d) {
+					return 'translate(' + d.x + ',' + d.y + ')';
+				});
+
+			// Specifies nodes' shape as rectangle as well asother characteristics
+			node.append('rect')
+				.attr('height', function(d) { return d.dy; })
+				.attr('width', sankey.nodeWidth())
+				.style('fill', function(d) { return d.color = color(d.name); })
+				.style('stroke', function(d) { return d3.rgb(d.color).darker(5); });
+
+			// Adds feature name corresponding to each node (e.g., firstBlood)
+			node.append('text')
+					.attr('x', -2)
+					.attr('y', function(d) { return d.dy / 2; })
+					.attr('dy', '.35em')
+					.attr('text-anchor', 'end')
+				.text(function(d) { return prettifyFeatureNames(d.name); })
+					.filter(function(d) { return d.x < width / 2; })
+					.attr('x', 2 + sankey.nodeWidth())
+					.attr('text-anchor', 'start');
+		});
+
+		function prettifyFeatureNames(s) {
+			if (s === 'winner_True') {
+				return 'Won';
+			} else if (s === 'winner_False') {
+				return 'Lost';
+			} else if (s === 'firstRiftHerald') {
+				return 'First Rift Herald';
+			}
+			return 'First ' + s.slice(5, s.length, 1); // Separates first from whatever follows
+		};
+	</script>
+</body>
+</html>

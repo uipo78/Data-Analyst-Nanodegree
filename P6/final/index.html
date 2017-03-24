@@ -65,16 +65,25 @@
 					.style('stroke-width', function(d) {
 						return Math.max(1, d.dy);
 					});
-			
+
+			// Stores each right node's total count
+			var totalsObj = {
+				2: 682 + 318,
+				3: 828 + 86,
+				4: 219 + 75,
+				5: 690 + 303,
+				6: 482 + 102
+			};
+
 			// Creates pop-up text for when mouse hovers over a link
 			link.append('title')
 				.text(function(d) {
 					var sourceSplit = d.source.name.split('_');
 
 					if (sourceSplit[1] === 'True') {
-						return d.value + ' teams won and achieved ' + prettifyFeatureNames(d.target.name).toLowerCase();
+						return ((d.value / totalsObj[d.target.node]) * 100).toFixed(2) + '% of teams won achieved ' + prettifyFeatureNames(d.target.name).toLowerCase() + ' and won';
 					}
-					return d.value + ' teams lost and achieved ' + prettifyFeatureNames(d.target.name).toLowerCase(); 
+					return ((d.value / totalsObj[d.target.node]) * 100).toFixed(2) + '% of teams won achieved ' + prettifyFeatureNames(d.target.name).toLowerCase() + ' and won'; 
 				});
 
 			// Adds node data to svg
@@ -114,7 +123,10 @@
 				return 'First Rift Herald';
 			}
 			return 'First ' + s.slice(5, s.length, 1); // Separates first from whatever follows
-		};
+		};		
 	</script>
+	<p>Data source:
+	<a href='https://developer.riotgames.com/getting-started.html'>seed data</a>
+	</p>
 </body>
 </html>

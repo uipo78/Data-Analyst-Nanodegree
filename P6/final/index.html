@@ -81,9 +81,9 @@
 					var sourceSplit = d.source.name.split('_');
 
 					if (sourceSplit[1] === 'True') {
-						return ((d.value / totalsObj[d.target.node]) * 100).toFixed(2) + '% of teams won achieved ' + prettifyFeatureNames(d.target.name).toLowerCase() + ' and won';
+						return ((d.value / totalsObj[d.target.node]) * 100).toFixed(2) + '% of teams achieved ' + prettifyFeatureNames(d.target.name).toLowerCase() + ' and won';
 					}
-					return ((d.value / totalsObj[d.target.node]) * 100).toFixed(2) + '% of teams won achieved ' + prettifyFeatureNames(d.target.name).toLowerCase() + ' and won'; 
+					return ((d.value / totalsObj[d.target.node]) * 100).toFixed(2) + '% of teams achieved ' + prettifyFeatureNames(d.target.name).toLowerCase() + ' and lost'; 
 				});
 
 			// Adds node data to svg

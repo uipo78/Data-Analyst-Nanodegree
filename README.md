@@ -1,5 +1,7 @@
 # Data Analyst Nanodegree Portfolio
 
+![Certificate](https://github.com/uipo78/data-analyst-nanodegree/blob/master/certificate.png)
+
 ## Projects
 
 * *Project 1:* [Analyzing the Stroop Effect](https://github.com/uipo78/data-analyst-nanodegree/tree/master/P1)
